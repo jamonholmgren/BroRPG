@@ -60,9 +60,10 @@ export const Game = {
 
     body.appendChild(startButton);
   },
-  onStartGame() {
+  async onStartGame() {
     Menu.hideMenu();
-    this.createWorld().then(() => show(gameCanvas));
+    await this.createWorld()
+    show(gameCanvas);
   },
   async createWorld() {
     // clear the contents of game
