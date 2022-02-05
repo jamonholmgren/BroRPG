@@ -46,7 +46,7 @@ export const Menu = {
     menu.appendChild(startButton);
 
     // start the music
-    Audio.playMusic("./game/music/EpicTVTheme.mp3", {
+    Audio.playMusic("./game/music/menusong.mp3", {
       volume: 0.2,
       loop: true,
       autoplay: true,
