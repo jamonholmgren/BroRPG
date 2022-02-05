@@ -1,4 +1,5 @@
 import { show, hide, find } from "./utilities.js";
+import { Audio } from "./audio.js";
 
 const menu = find("menu");
 
@@ -43,6 +44,13 @@ export const Menu = {
 
     // add it to the menu
     menu.appendChild(startButton);
+
+    // start the music
+    Audio.playMusic("./game/music/EpicTVTheme.mp3", {
+      volume: 0.5,
+      loop: true,
+      autoplay: true,
+    });
   },
   showMenu() {
     show(menu, { animate: 5.0 });

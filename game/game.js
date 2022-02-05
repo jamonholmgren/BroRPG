@@ -16,10 +16,24 @@ export const Game = {
     // make the background dark gray
     body.style.backgroundColor = "#333333";
 
-    // create the menu
-    Menu.onStart(() => this.start());
-    Menu.createMenu();
-    Menu.showMenu();
+    // make a single Start button in the middle of the screen
+    const startButton = document.createElement("button");
+    startButton.id = "start-button";
+    startButton.innerText = "Start";
+    startButton.style.position = "absolute";
+    startButton.style.top = "50%";
+    startButton.style.left = "50%";
+    startButton.style.transform = "translate(-50%, -50%)";
+    startButton.style.cursor = "pointer";
+    startButton.style.zIndex = "1";
+    startButton.addEventListener("click", () => {
+      startButton.remove();
+      // create the menu
+      Menu.onStart(() => this.start());
+      Menu.createMenu();
+      Menu.showMenu();
+    });
+    body.appendChild(startButton);
   },
   start() {
     Menu.hideMenu();
