@@ -16,10 +16,11 @@ export const Game = {
     // make the background dark gray
     body.style.backgroundColor = "#333333";
 
+    // TEMPORARY! Will replace this later with something better
     // make a single Start button in the middle of the screen
     const startButton = document.createElement("button");
     startButton.id = "start-button";
-    startButton.innerText = "Start";
+    startButton.innerText = "Start with Music";
     startButton.style.position = "absolute";
     startButton.style.top = "50%";
     startButton.style.left = "50%";
@@ -29,13 +30,16 @@ export const Game = {
     startButton.addEventListener("click", () => {
       startButton.remove();
       // create the menu
-      Menu.onStart(() => this.start());
       Menu.createMenu();
       Menu.showMenu();
+
+      // Menu can start the game, so let's subscribe to that event
+      Menu.onStart(() => this.onStartGame());
     });
+
     body.appendChild(startButton);
   },
-  start() {
+  onStartGame() {
     Menu.hideMenu();
     this.createWorld().then(() => show(gameCanvas));
   },
