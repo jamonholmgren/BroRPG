@@ -47,3 +47,12 @@ export function hide(element, options = {}) {
     element.style.opacity = 0;
   }
 }
+
+// function to split strings into array of individual characters
+export function splitChars(str) {
+  const chars = [];
+  for (let i = 0; i < str.length; i++) {
+    chars.push(str.charAt(i));
+  }
+  return chars;
+}
