@@ -1,4 +1,4 @@
-import { show, find } from "./utilities.js";
+import { show, hide, find } from "./utilities.js";
 
 const menu = find("menu");
 
@@ -35,15 +35,21 @@ export const Menu = {
     startButton.style.zIndex = "1";
 
     // trigger the start button when clicked
-    startButton.addEventListener("click", () => this.hideMenu());
+    startButton.addEventListener("click", () => {
+      // if there's an onStart listener, then call it
+      this.onStart?.();
+    });
 
     // add it to the menu
     menu.appendChild(startButton);
   },
   showMenu() {
-    show(menu);
+    show(menu, { animate: 5.0 });
   },
   hideMenu() {
-    hide(menu);
+    hide(menu, { animate: 0.5 });
+  },
+  onStart(callback) {
+    this.onStart = callback;
   },
 };
