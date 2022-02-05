@@ -13,9 +13,10 @@ export const Game = {
 
     body.style.backgroundColor = "gray";
 
+    Menu.onStart(() => this.start());
+
     Menu.createMenu();
     Menu.showMenu();
-    Menu.onStart(() => this.start());
   },
   start() {
     hide(menu);
