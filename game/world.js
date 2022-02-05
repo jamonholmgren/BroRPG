@@ -11,7 +11,7 @@ export const World = {
   data() {},
   async loadMap(mapName) {
     // load the text file asynchronously
-    const response = await fetch(`/game/maps/${mapName}.map`);
+    const response = await fetch(`./maps/${mapName}.map`);
     const homeMapText = await response.text();
 
     // temporary, just for debugging
