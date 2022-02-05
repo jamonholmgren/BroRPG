@@ -7,20 +7,12 @@ export const Menu = {
     // clear the contents of menu
     menu.innerHTML = "";
 
-    // make the menu 600x600
+    // style the menu
     menu.style.width = "600px";
     menu.style.height = "600px";
-
-    // give the menu a drop shadow
     menu.style.boxShadow = "10px 10px 30px black";
-
-    // set the menu background image to bg_menu.jpg
     menu.style.backgroundImage = "url('/game/backgrounds/bg_menu.jpg')";
-
-    // stretch the menu background image to fill the entire screen
     menu.style.backgroundSize = "cover";
-
-    // set the menu to be centered
     menu.style.position = "absolute";
     menu.style.top = "50%";
     menu.style.left = "50%";
@@ -29,6 +21,8 @@ export const Menu = {
     // create a clickable area in the middle for the start button
     const startButton = document.createElement("div");
     startButton.id = "start-button";
+
+    // style the start button
     startButton.style.width = "200px";
     startButton.style.height = "200px";
     startButton.style.backgroundColor = "transparent";
@@ -39,10 +33,12 @@ export const Menu = {
     startButton.style.transform = "translate(-50%, -50%)";
     startButton.style.cursor = "pointer";
     startButton.style.zIndex = "1";
-    menu.appendChild(startButton);
 
     // trigger the start button when clicked
     startButton.addEventListener("click", () => this.hideMenu());
+
+    // add it to the menu
+    menu.appendChild(startButton);
   },
   showMenu() {
     show(menu);
