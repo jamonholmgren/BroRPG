@@ -11,7 +11,7 @@ export const Game = {
     hide(gameCanvas);
     hide(menu);
 
-    body.style.backgroundColor = "gray";
+    body.style.backgroundColor = "#333333";
 
     Menu.onStart(() => this.start());
 

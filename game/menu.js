@@ -17,6 +17,7 @@ export const Menu = {
     menu.style.top = "50%";
     menu.style.left = "50%";
     menu.style.transform = "translate(-50%, -50%)";
+    menu.style.borderRadius = "50px";
 
     // create a clickable area in the middle for the start button
     const startButton = document.createElement("div");
