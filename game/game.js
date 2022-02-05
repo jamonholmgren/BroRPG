@@ -1,5 +1,6 @@
 import { Menu } from "./menu.js";
 import { World } from "./world.js";
+import { Audio } from "./audio.js";
 import { find, show, hide } from "./utilities.js";
 
 const body = document.body;
@@ -32,6 +33,26 @@ export const Game = {
       // create the menu
       Menu.createMenu();
       Menu.showMenu();
+
+      // Add a play/pause button to the top right of the screen
+      const playPauseButton = document.createElement("button");
+      playPauseButton.id = "play-pause-button";
+      playPauseButton.innerText = "Pause Music";
+      playPauseButton.style.position = "absolute";
+      playPauseButton.style.top = "10px";
+      playPauseButton.style.right = "10px";
+      playPauseButton.style.cursor = "pointer";
+      playPauseButton.style.zIndex = "1";
+      playPauseButton.addEventListener("click", () => {
+        if (playPauseButton.innerText === "Play Music") {
+          playPauseButton.innerText = "Pause Music";
+          Audio.resumeMusic();
+        } else {
+          playPauseButton.innerText = "Play Music";
+          Audio.pauseMusic();
+        }
+      });
+      body.appendChild(playPauseButton);
 
       // Menu can start the game, so let's subscribe to that event
       Menu.onStart(() => this.onStartGame());

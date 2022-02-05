@@ -47,7 +47,7 @@ export const Menu = {
 
     // start the music
     Audio.playMusic("./game/music/EpicTVTheme.mp3", {
-      volume: 0.5,
+      volume: 0.2,
       loop: true,
       autoplay: true,
     });
