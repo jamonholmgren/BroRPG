@@ -35,14 +35,14 @@ export const World = {
           case "#": // World Edge
             tileElement.style.backgroundColor = "gray";
             break;
+           case "*": //Wall
+            tileElement.style.backgroundColor = "gray";
+            break;
           case "T": //Tree
             tileElement.style.backgroundImage = "url(./game/tiles/tree1.png)";
             break;
-          case "*": //Wall
-            tileElement.style.backgroundImage = "url(./game/tiles/water.png)";
-            break;
           case "~": // Water
-            tileElement.style.backgroundColor = "blue";
+            tileElement.style.backgroundImage = "url(./game/tiles/water.png)";
             break;
           case ";": // Door
             tileElement.style.backgroundColor = "red";
@@ -53,6 +53,12 @@ export const World = {
           case "-": // Road
             tileElement.style.backgroundColor = "brown";
             break;
+          case "=": // Bridge
+            tileElement.style.backgroundColor = "gray";
+            break;
+          case "^": // Mountain
+            tileElement.style.backgroundColor = "gray";
+            break; 
           default:
             tileElement.style.backgroundColor = "transparent";
         }
