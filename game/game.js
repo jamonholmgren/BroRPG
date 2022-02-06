@@ -8,9 +8,13 @@ import { Settings } from "./settings.js";
 export const Game = {
   // character state
   character: {
-    element: undefined,
+    name: "Adventurer",
+    hp: 100,
+    maxHp: 100,
+    type: "ranger",
     x: 0,
     y: 0,
+    element: undefined,
   },
   npcs: [],
 
@@ -174,9 +178,9 @@ export const Game = {
     this.character.element.style.width = "32px";
     this.character.element.style.height = "32px";
     this.character.element.style.zIndex = 100;
-    this.character.element.style.backgroundColor = "dodgerblue";
+    // this.character.element.style.backgroundColor = "dodgerblue";
     // the character's type will be used to set the sprite
-    // this.character.element.style.backgroundImage = `url(./game/characters/${this.character.type}.png)`;
+    this.character.element.style.backgroundImage = `url(./game/characters/${this.character.type}.png)`;
     this.character.element.style.transition = "top 0.5s, left 0.5s";
     this.tiles.appendChild(this.character.element);
   },

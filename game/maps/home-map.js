@@ -49,7 +49,6 @@ export const HomeMap = {
   character: {
     x: 8,
     y: 4,
-    hp: 100,
   },
   npcs: [
     {
