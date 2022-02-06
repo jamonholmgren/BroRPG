@@ -60,3 +60,7 @@ export function splitChars(str) {
   }
   return chars;
 }
+
+export function buildTileMap(mapStr) {
+  return mapStr.split("\n").map((line) => splitChars(line));
+}

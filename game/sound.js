@@ -1,5 +1,6 @@
-export const Audio = {
+export const Sound = {
   musicElement: document.getElementById("background-music"),
+  playPromise: undefined,
   playMusic(musicPath, options = {}) {
     // if the musicElement is already playing music, stop it
     if (this.musicElement.src) {
@@ -20,18 +21,26 @@ export const Audio = {
       options.autoplay !== undefined ? options.autoplay : true;
 
     // play the audio
-    this.musicElement.play();
+    this.playPromise = this.musicElement.play();
   },
   pauseMusic() {
-    this.musicElement.pause();
+    // check if the music element is playing
+    if (this.playPromise) {
+      this.playPromise.then(() => this.musicElement.pause());
+    } else {
+      this.musicElement.pause();
+    }
   },
   resumeMusic() {
-    this.musicElement.play();
+    this.playPromise = this.musicElement.play();
   },
   stopMusic() {
     // stop the music
     this.musicElement?.pause();
     this.musicElement.currentTime = 0;
     this.musicElement.src = "";
+  },
+  playSound(soundName) {
+    new Audio(`./game/sounds/${soundName}`).play();
   },
 };

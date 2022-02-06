@@ -1,5 +1,5 @@
 import { show, hide, find, noop } from "./utilities.js";
-import { Audio } from "./audio.js";
+import { Sound } from "./sound.js";
 // import { Settings } from "./settings.js";
 
 export const Menu = {
@@ -21,10 +21,15 @@ export const Menu = {
     this.menu.innerHTML = "";
 
     this.styleMenu();
-    this.addStartButton();
+    this.addStartButton(() => {
+      Sound.playSound("oof.m4a");
+
+      // if there's an onStart listener, then call it
+      this.onStart?.();
+    });
 
     // start the music
-    Audio.playMusic("./game/music/menusong.mp3", {
+    Sound.playMusic("./game/music/menusong.mp3", {
       volume: 0.2,
       loop: true,
       autoplay: true,
@@ -49,7 +54,7 @@ export const Menu = {
     this.menu.style.transform = "translate(-50%, -50%)";
     this.menu.style.borderRadius = "50px";
   },
-  addStartButton() {
+  addStartButton(callback) {
     // create a clickable area in the middle for the start button
     const startButton = document.createElement("div");
     startButton.id = "start-button";
@@ -67,10 +72,7 @@ export const Menu = {
     startButton.style.zIndex = "1";
 
     // trigger the start button when clicked
-    startButton.addEventListener("click", () => {
-      // if there's an onStart listener, then call it
-      this.onStart?.();
-    });
+    startButton.addEventListener("click", callback);
 
     // add it to the menu
     this.menu.appendChild(startButton);

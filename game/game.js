@@ -1,6 +1,6 @@
 import { Menu } from "./menu.js";
 import { World } from "./world.js";
-import { Audio } from "./audio.js";
+import { Sound } from "./sound.js";
 import { find, show, hide } from "./utilities.js";
 import { Controls } from "./controls.js";
 import { Settings } from "./settings.js";
@@ -87,8 +87,7 @@ export const Game = {
       this.updateMovables();
       this.centerGameView();
     } else {
-      // play some sound, like "oof"
-      console.log("oof");
+      Sound.playSound("oof.m4a");
     }
   },
   updateMovables() {
@@ -202,10 +201,10 @@ export const Game = {
   playPauseMusic() {
     if (Settings.settings.music) {
       this.playPauseButton.innerText = "Pause Music";
-      Audio.resumeMusic();
+      Sound.resumeMusic();
     } else {
       this.playPauseButton.innerText = "Play Music";
-      Audio.pauseMusic();
+      Sound.pauseMusic();
     }
   },
   setupKeys() {

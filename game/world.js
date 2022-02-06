@@ -1,3 +1,4 @@
+import { buildTileMap } from "./utilities.js";
 import { HomeMap } from "./maps/home-map.js";
 
 export const World = {
@@ -5,7 +6,7 @@ export const World = {
   map: [],
   load() {
     this.map = HomeMap;
-    this.tiles = HomeMap.tiles();
+    this.tiles = buildTileMap(this.map.ascii);
   },
   isPassable(x, y) {
     return this.passableTiles.includes(this.tiles[y][x]);

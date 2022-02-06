@@ -1,7 +1,5 @@
-import { splitChars } from "../utilities.js";
-
 export const HomeMap = {
-  map: `
+  ascii: `
 ###############################################################################
 #                                                                             #
 #     *******              TTTTTTTTTTTT                                       #
@@ -43,9 +41,6 @@ export const HomeMap = {
 #                                                                             #
 ###############################################################################
 `,
-  tiles() {
-    return this.map.split("\n").map((line) => splitChars(line));
-  },
   character: {
     x: 8,
     y: 4,
@@ -57,6 +52,7 @@ export const HomeMap = {
       x: 8,
       y: 8,
       hp: 40,
+      maxHP: 50,
       disposition: "friendly",
       dialogue: [
         "Hello there, I'm Tanford.",
@@ -65,6 +61,11 @@ export const HomeMap = {
         "I've been hearing a lot of wolves howling lately.",
         "You sure like talking to people, don't you?",
       ],
+      behaviors: () => {
+        if (this.hp < 40) {
+          // do some sort of healing behavior
+        }
+      },
     },
     {
       name: "Grüvsch",
@@ -72,6 +73,7 @@ export const HomeMap = {
       x: 20,
       y: 10,
       hp: 50,
+      maxHP: 50,
       disposition: "hostile",
       dialogue: ["Hhrnnnnggggghhhhhh!", "Ruggghh!", "Rrrrrrrrggghh!"],
     },
