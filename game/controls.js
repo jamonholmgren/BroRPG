@@ -1,8 +1,18 @@
 export const Controls = {
+  cooldown: 0,
+  cooldownTimer: undefined,
   keyListeners: {},
   onKeyPress(event) {
-    const callback = this.keyListeners[event.key];
-    if (callback) callback();
+    if (this.cooldown <= 0) {
+      const callback = this.keyListeners[event.key];
+      if (callback) callback();
+
+      // reset cooldown
+      clearInterval(this.cooldownTimer);
+      this.cooldown = 1;
+      const t = this;
+      this.cooldownTimer = setTimeout(() => (t.cooldown = 0), 400);
+    }
   },
   init() {
     window.addEventListener("keypress", this.onKeyPress.bind(this));

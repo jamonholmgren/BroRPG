@@ -13,10 +13,14 @@ export const Game = {
     y: 3,
   },
 
+  // references to DOM elements
   body: document.body,
   gameView: find("game"),
   menu: find("menu"),
+  playPauseButton: undefined,
   tiles: undefined,
+
+  // set up the game
   init() {
     // load the settings
     Settings.loadSettings();
@@ -30,28 +34,17 @@ export const Game = {
 
     // TEMPORARY! Will replace this later with something better
     // make a single Start button in the middle of the screen
-    const startButton = document.createElement("button");
-    startButton.id = "start-button";
-    startButton.innerText = "Start BroRPG";
-    startButton.style.position = "absolute";
-    startButton.style.top = "50%";
-    startButton.style.left = "50%";
-    startButton.style.transform = "translate(-50%, -50%)";
-    startButton.style.cursor = "pointer";
-    startButton.style.zIndex = "1";
-    startButton.addEventListener("click", () => {
-      startButton.remove();
+    this.addStartButton(() => {
+      find("start-button").remove();
       // create the menu
-      Menu.createMenu();
+      Menu.createMenu({
+        onStart: () => this.onStartGame(),
+      });
+
       Menu.showMenu();
 
       this.addPlayPauseButton();
-
-      // Menu can start the game, so let's subscribe to that event
-      Menu.onStart(() => this.onStartGame());
     });
-
-    this.body.appendChild(startButton);
   },
   onStartGame() {
     Menu.hideMenu();
@@ -90,6 +83,7 @@ export const Game = {
     Controls.on("w", () => this.moveCharacter(0, -1));
     Controls.on("a", () => this.moveCharacter(-1, 0));
     Controls.on("s", () => this.moveCharacter(0, 1));
+    Controls.on("x", () => this.moveCharacter(0, 1));
     Controls.on("d", () => this.moveCharacter(1, 0));
 
     Controls.on("q", () => this.moveCharacter(-1, -1));
@@ -131,7 +125,6 @@ export const Game = {
     this.gameView.style.width = "600px";
     this.gameView.style.height = "600px";
     this.gameView.style.boxShadow = "10px 10px 30px black";
-    // this.gameView.style.backgroundImage = "url('/game/backgrounds/bg_game.jpg')";
     this.gameView.style.backgroundColor = "#314432";
     this.gameView.style.backgroundSize = "cover";
     this.gameView.style.position = "absolute";
@@ -141,38 +134,49 @@ export const Game = {
     this.gameView.style.borderRadius = "50px";
     this.gameView.style.overflow = "hidden";
   },
+  addStartButton(onClick) {
+    const startButton = document.createElement("button");
+    startButton.id = "start-button";
+    startButton.innerText = "Start BroRPG";
+
+    startButton.style.position = "absolute";
+    startButton.style.top = "50%";
+    startButton.style.left = "50%";
+    startButton.style.transform = "translate(-50%, -50%)";
+    startButton.style.cursor = "pointer";
+    startButton.style.zIndex = "1";
+    startButton.addEventListener("click", onClick);
+
+    this.body.appendChild(startButton);
+  },
   addPlayPauseButton() {
     // Add a play/pause button to the top right of the screen
-    const playPauseButton = document.createElement("button");
-    playPauseButton.id = "play-pause-button";
-    playPauseButton.innerText = "Pause Music";
-    playPauseButton.style.position = "absolute";
-    playPauseButton.style.top = "10px";
-    playPauseButton.style.right = "10px";
-    playPauseButton.style.cursor = "pointer";
-    playPauseButton.style.zIndex = "1";
+    this.playPauseButton = document.createElement("button");
+    this.playPauseButton.id = "play-pause-button";
+    this.playPauseButton.innerText = "Pause Music";
+    this.playPauseButton.style.position = "absolute";
+    this.playPauseButton.style.top = "10px";
+    this.playPauseButton.style.right = "10px";
+    this.playPauseButton.style.cursor = "pointer";
+    this.playPauseButton.style.zIndex = "1";
 
-    if (Settings.settings.music) {
-      playPauseButton.innerText = "Pause Music";
-      Audio.resumeMusic();
-    } else {
-      playPauseButton.innerText = "Play Music";
-      Audio.pauseMusic();
-    }
+    this.playPauseMusic();
 
-    playPauseButton.addEventListener("click", () => {
+    this.playPauseButton.addEventListener("click", () => {
       Settings.settings.music = !Settings.settings.music;
-
-      if (Settings.settings.music) {
-        playPauseButton.innerText = "Pause Music";
-        Audio.resumeMusic();
-      } else {
-        playPauseButton.innerText = "Play Music";
-        Audio.pauseMusic();
-      }
-
       Settings.saveSettings();
+
+      this.playPauseMusic();
     });
     this.body.appendChild(playPauseButton);
+  },
+  playPauseMusic() {
+    if (Settings.settings.music) {
+      this.playPauseButton.innerText = "Pause Music";
+      Audio.resumeMusic();
+    } else {
+      this.playPauseButton.innerText = "Play Music";
+      Audio.pauseMusic();
+    }
   },
 };

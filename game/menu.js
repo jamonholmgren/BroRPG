@@ -1,26 +1,55 @@
-import { show, hide, find } from "./utilities.js";
+import { show, hide, find, noop } from "./utilities.js";
 import { Audio } from "./audio.js";
-import { Settings } from "./settings.js";
-
-const menu = find("menu");
+// import { Settings } from "./settings.js";
 
 export const Menu = {
-  createMenu() {
+  // callback functions
+  onStart: noop,
+  onSettings: noop,
+  onQuit: noop,
+
+  // references to DOM elements
+  body: document.body,
+  menu: find("menu"),
+
+  // options can be onStart: Fn, onSettings: Fn, onQuit: Fn
+  createMenu(options = {}) {
+    // hang onto the onStart callback for future use
+    if (options.onStart) this.onStart = options.onStart;
+
     // clear the contents of menu
-    menu.innerHTML = "";
+    this.menu.innerHTML = "";
 
+    this.styleMenu();
+    this.addStartButton();
+
+    // start the music
+    Audio.playMusic("./game/music/menusong.mp3", {
+      volume: 0.2,
+      loop: true,
+      autoplay: true,
+    });
+  },
+  showMenu() {
+    show(menu, { animate: 5.0 });
+  },
+  hideMenu() {
+    hide(menu, { animate: 0.5 });
+  },
+  styleMenu() {
     // style the menu
-    menu.style.width = "600px";
-    menu.style.height = "600px";
-    menu.style.boxShadow = "10px 10px 30px black";
-    menu.style.backgroundImage = "url('./game/backgrounds/bg_menu.jpg')";
-    menu.style.backgroundSize = "cover";
-    menu.style.position = "absolute";
-    menu.style.top = "50%";
-    menu.style.left = "50%";
-    menu.style.transform = "translate(-50%, -50%)";
-    menu.style.borderRadius = "50px";
-
+    this.menu.style.width = "600px";
+    this.menu.style.height = "600px";
+    this.menu.style.boxShadow = "10px 10px 30px black";
+    this.menu.style.backgroundImage = "url('./game/backgrounds/bg_menu.jpg')";
+    this.menu.style.backgroundSize = "cover";
+    this.menu.style.position = "absolute";
+    this.menu.style.top = "50%";
+    this.menu.style.left = "50%";
+    this.menu.style.transform = "translate(-50%, -50%)";
+    this.menu.style.borderRadius = "50px";
+  },
+  addStartButton() {
     // create a clickable area in the middle for the start button
     const startButton = document.createElement("div");
     startButton.id = "start-button";
@@ -44,22 +73,6 @@ export const Menu = {
     });
 
     // add it to the menu
-    menu.appendChild(startButton);
-
-    // start the music
-    Audio.playMusic("./game/music/menusong.mp3", {
-      volume: 0.2,
-      loop: true,
-      autoplay: true,
-    });
-  },
-  showMenu() {
-    show(menu, { animate: 5.0 });
-  },
-  hideMenu() {
-    hide(menu, { animate: 0.5 });
-  },
-  onStart(callback) {
-    this.onStart = callback;
+    this.menu.appendChild(startButton);
   },
 };

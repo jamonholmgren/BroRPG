@@ -1,3 +1,7 @@
+export function noop() {
+  // doesn't do anything -- it's a "no-operation"
+}
+
 export function find(id) {
   return document.getElementById(id);
 }
