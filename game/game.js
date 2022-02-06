@@ -3,6 +3,7 @@ import { World } from "./world.js";
 import { Audio } from "./audio.js";
 import { find, show, hide } from "./utilities.js";
 import { Controls } from "./controls.js";
+import { Settings } from "./settings.js";
 
 export const Game = {
   // character state
@@ -17,6 +18,9 @@ export const Game = {
   menu: find("menu"),
   tiles: undefined,
   init() {
+    // load the settings
+    Settings.loadSettings();
+
     // hide everything so we can build it
     hide(this.gameView);
     hide(this.menu);
@@ -28,7 +32,7 @@ export const Game = {
     // make a single Start button in the middle of the screen
     const startButton = document.createElement("button");
     startButton.id = "start-button";
-    startButton.innerText = "Start with Music";
+    startButton.innerText = "Start BroRPG";
     startButton.style.position = "absolute";
     startButton.style.top = "50%";
     startButton.style.left = "50%";
@@ -147,14 +151,27 @@ export const Game = {
     playPauseButton.style.right = "10px";
     playPauseButton.style.cursor = "pointer";
     playPauseButton.style.zIndex = "1";
+
+    if (Settings.settings.music) {
+      playPauseButton.innerText = "Pause Music";
+      Audio.resumeMusic();
+    } else {
+      playPauseButton.innerText = "Play Music";
+      Audio.pauseMusic();
+    }
+
     playPauseButton.addEventListener("click", () => {
-      if (playPauseButton.innerText === "Play Music") {
+      Settings.settings.music = !Settings.settings.music;
+
+      if (Settings.settings.music) {
         playPauseButton.innerText = "Pause Music";
         Audio.resumeMusic();
       } else {
         playPauseButton.innerText = "Play Music";
         Audio.pauseMusic();
       }
+
+      Settings.saveSettings();
     });
     this.body.appendChild(playPauseButton);
   },

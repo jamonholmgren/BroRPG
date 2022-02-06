@@ -1,5 +1,6 @@
 import { show, hide, find } from "./utilities.js";
 import { Audio } from "./audio.js";
+import { Settings } from "./settings.js";
 
 const menu = find("menu");
 
