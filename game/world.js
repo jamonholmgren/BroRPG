@@ -27,13 +27,13 @@ export const World = {
         // change the background color of the tile based on the tile type
         switch (tile) {
           case " ": // Grass
-            tileElement.style.backgroundColor = "#425543";
+            tileElement.style.backgroundImage = "url(./game/tiles/grass1.png)";
             break;
           case "#": // World Edge
             tileElement.style.backgroundColor = "gray";
             break;
           case "T": //Tree
-            tileElement.style.backgroundColor = "green";
+            tileElement.style.backgroundImage = "url(./game/tiles/tree1.png)";
             break;
           case "*": //Wall
             tileElement.style.backgroundColor = "gray";
