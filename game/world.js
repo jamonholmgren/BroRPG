@@ -1,7 +1,7 @@
 import { HomeMap } from "./maps/home-map.js";
 
 export const World = {
-  passableTiles: [" ", ";", "-"],
+  passableTiles: [" ", ";", "-","="],
   map: [],
   load() {
     this.map = HomeMap.tiles();
