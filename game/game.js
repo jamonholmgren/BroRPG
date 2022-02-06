@@ -168,7 +168,7 @@ export const Game = {
 
       this.playPauseMusic();
     });
-    this.body.appendChild(playPauseButton);
+    this.body.appendChild(this.playPauseButton);
   },
   addCharacter() {
     // add the character to the gameView
