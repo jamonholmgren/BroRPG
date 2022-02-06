@@ -62,10 +62,19 @@ export const Game = {
   },
   async onStartGame() {
     Menu.hideMenu();
-    await this.createWorld()
+
+    // load the world
+    await World.load();
+
+    // set up the game canvas and show it
+    this.styleGameCanvas();
     show(gameCanvas);
+
+    // build tiles
+    const tiles = World.buildTiles();
+    gameCanvas.appendChild(tiles);
   },
-  async createWorld() {
+  styleGameCanvas() {
     // clear the contents of game
     gameCanvas.innerHTML = "";
 
@@ -82,9 +91,6 @@ export const Game = {
     gameCanvas.style.transform = "translate(-50%, -50%)";
     gameCanvas.style.borderRadius = "50px";
     gameCanvas.style.overflow = "hidden";
-
-    // load the world
-    await World.init();
-    gameCanvas.innerHTML = World.mapText;
   },
+  gameLoop() {},
 };
