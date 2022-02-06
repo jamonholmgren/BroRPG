@@ -2,20 +2,27 @@ import { Menu } from "./menu.js";
 import { World } from "./world.js";
 import { Audio } from "./audio.js";
 import { find, show, hide } from "./utilities.js";
-
-const body = document.body;
-
-const gameCanvas = find("game");
-const menu = find("menu");
+import { Controls } from "./controls.js";
 
 export const Game = {
+  // character state
+  character: {
+    element: undefined,
+    x: 3,
+    y: 3,
+  },
+
+  body: document.body,
+  gameView: find("game"),
+  menu: find("menu"),
+  tiles: undefined,
   init() {
     // hide everything so we can build it
-    hide(gameCanvas);
-    hide(menu);
+    hide(this.gameView);
+    hide(this.menu);
 
     // make the background dark gray
-    body.style.backgroundColor = "#333333";
+    this.body.style.backgroundColor = "#333333";
 
     // TEMPORARY! Will replace this later with something better
     // make a single Start button in the middle of the screen
@@ -34,31 +41,13 @@ export const Game = {
       Menu.createMenu();
       Menu.showMenu();
 
-      // Add a play/pause button to the top right of the screen
-      const playPauseButton = document.createElement("button");
-      playPauseButton.id = "play-pause-button";
-      playPauseButton.innerText = "Pause Music";
-      playPauseButton.style.position = "absolute";
-      playPauseButton.style.top = "10px";
-      playPauseButton.style.right = "10px";
-      playPauseButton.style.cursor = "pointer";
-      playPauseButton.style.zIndex = "1";
-      playPauseButton.addEventListener("click", () => {
-        if (playPauseButton.innerText === "Play Music") {
-          playPauseButton.innerText = "Pause Music";
-          Audio.resumeMusic();
-        } else {
-          playPauseButton.innerText = "Play Music";
-          Audio.pauseMusic();
-        }
-      });
-      body.appendChild(playPauseButton);
+      this.addPlayPauseButton();
 
       // Menu can start the game, so let's subscribe to that event
       Menu.onStart(() => this.onStartGame());
     });
 
-    body.appendChild(startButton);
+    this.body.appendChild(startButton);
   },
   async onStartGame() {
     Menu.hideMenu();
@@ -68,29 +57,99 @@ export const Game = {
 
     // set up the game canvas and show it
     this.styleGameCanvas();
-    show(gameCanvas);
+    show(this.gameView);
 
     // build tiles
-    const tiles = World.buildTiles();
-    gameCanvas.appendChild(tiles);
+    this.tiles = World.buildTiles();
+    this.tiles.style.position = "absolute";
+    this.gameView.appendChild(this.tiles);
+
+    this.centerGameView();
+
+    // add the character
+    this.character.element = document.createElement("div");
+    this.character.element.id = "character";
+    this.character.element.style.position = "absolute";
+    this.character.element.style.width = "32px";
+    this.character.element.style.height = "32px";
+    this.character.element.style.zIndex = "1";
+    this.character.element.style.backgroundColor = "red";
+    this.tiles.appendChild(this.character.element);
+
+    // update all movables' positions
+    this.updateMovables();
+
+    // listen for key presses
+    Controls.init();
+    Controls.on("w", () => {
+      this.character.y -= 1;
+      this.updateMovables();
+      this.centerGameView();
+    });
+    Controls.on("s", () => {
+      this.character.y += 1;
+      this.updateMovables();
+      this.centerGameView();
+    });
+    Controls.on("a", () => {
+      this.character.x -= 1;
+      this.updateMovables();
+      this.centerGameView();
+    });
+    Controls.on("d", () => {
+      this.character.x += 1;
+      this.updateMovables();
+      this.centerGameView();
+    });
+  },
+  updateMovables() {
+    // update the character's element to match its position on the tile map
+    this.character.element.style.top = `${this.character.y * 32}px`;
+    this.character.element.style.left = `${this.character.x * 32}px`;
+  },
+  centerGameView() {
+    // center the game view on the character
+    const tx = -this.character.x * 32 - 16 + 300;
+    const ty = -this.character.y * 32 - 16 + 300;
+    this.tiles.style.transform = `translate(${tx}px, ${ty}px)`;
   },
   styleGameCanvas() {
     // clear the contents of game
-    gameCanvas.innerHTML = "";
+    this.gameView.innerHTML = "";
 
     // style the game canvas
-    gameCanvas.style.width = "600px";
-    gameCanvas.style.height = "600px";
-    gameCanvas.style.boxShadow = "10px 10px 30px black";
-    // gameCanvas.style.backgroundImage = "url('/game/backgrounds/bg_game.jpg')";
-    gameCanvas.style.backgroundColor = "#314432";
-    gameCanvas.style.backgroundSize = "cover";
-    gameCanvas.style.position = "absolute";
-    gameCanvas.style.top = "50%";
-    gameCanvas.style.left = "50%";
-    gameCanvas.style.transform = "translate(-50%, -50%)";
-    gameCanvas.style.borderRadius = "50px";
-    gameCanvas.style.overflow = "hidden";
+    this.gameView.style.width = "600px";
+    this.gameView.style.height = "600px";
+    this.gameView.style.boxShadow = "10px 10px 30px black";
+    // this.gameView.style.backgroundImage = "url('/game/backgrounds/bg_game.jpg')";
+    this.gameView.style.backgroundColor = "#314432";
+    this.gameView.style.backgroundSize = "cover";
+    this.gameView.style.position = "absolute";
+    this.gameView.style.top = "50%";
+    this.gameView.style.left = "50%";
+    this.gameView.style.transform = "translate(-50%, -50%)";
+    this.gameView.style.borderRadius = "50px";
+    this.gameView.style.overflow = "hidden";
   },
-  gameLoop() {},
+  addPlayPauseButton() {
+    // Add a play/pause button to the top right of the screen
+    const playPauseButton = document.createElement("button");
+    playPauseButton.id = "play-pause-button";
+    playPauseButton.innerText = "Pause Music";
+    playPauseButton.style.position = "absolute";
+    playPauseButton.style.top = "10px";
+    playPauseButton.style.right = "10px";
+    playPauseButton.style.cursor = "pointer";
+    playPauseButton.style.zIndex = "1";
+    playPauseButton.addEventListener("click", () => {
+      if (playPauseButton.innerText === "Play Music") {
+        playPauseButton.innerText = "Pause Music";
+        Audio.resumeMusic();
+      } else {
+        playPauseButton.innerText = "Play Music";
+        Audio.pauseMusic();
+      }
+    });
+    this.body.appendChild(playPauseButton);
+  },
 };
