@@ -1,3 +1,4 @@
+/** @type {import("../types").MapType} */
 export const HomeMap = {
   ascii: `
 ###############################################################################
@@ -41,14 +42,14 @@ export const HomeMap = {
 #                                                                             #
 ###############################################################################
 `,
-  character: {
+  playerPresets: {
     x: 8,
     y: 4,
   },
   npcs: [
     {
       name: "Tanford",
-      type: "villager",
+      race: "human",
       x: 8,
       y: 8,
       hp: 40,
@@ -58,42 +59,45 @@ export const HomeMap = {
         {
           name: "Healing Potion",
           type: "potion",
-          hp: 20,
+          onUse: (item, player) => {
+            player.hp += 20;
+            item.depleted = true;
+          },
         },
       ],
       wielded: false,
       behaviors: {
         // these are just ideas. don't actually use them
-        step: (response) => {
-          if (this.hp < 40) {
+        step: (self) => {
+          if (self.hp < 40) {
             // do some sort of healing behavior
-            if (this.inventory.includes("Healing Potion")) {
-              response.heal();
+            if (self.inventory.find((i) => i.name === "Healing Potion")) {
+              self.useInventoryItem(i);
             }
           } else {
-            response.doDefaultResponse();
+            self.doDefaultResponse();
           }
         },
-        talk: (response) => {
-          if (this.hp < 30) {
-            response.talk("I'm really hurt. I need to heal up.");
+        talk: (self) => {
+          if (self.hp < 30) {
+            self.talk("I'm really hurt. I need to heal up.");
           } else {
-            response.talk("I'm fine. I'm just a villager.");
+            self.talk("I'm fine. I'm just a villager.");
           }
         },
-        takeDamage: (response) => {
-          if (this.hp < 30) {
-            response.talk("Why are you hitting me?!");
-            response.runAway();
+        takeDamage: (self) => {
+          if (self.hp < 30) {
+            self.talk("Why are you hitting me?!");
+            self.runAway();
           } else {
-            response.doDefaultResponse();
+            self.doDefaultResponse();
           }
         },
       },
     },
     {
       name: "Grüvsch",
-      type: "goblin",
+      race: "goblin",
       x: 20,
       y: 10,
       hp: 50,
@@ -104,7 +108,10 @@ export const HomeMap = {
           name: "Club",
           type: "weapon",
           damage: 10,
-          speed: 1,
+          onUse: (item, self, other) => {
+            // do some sort of damage behavior
+            // always damages itself too, and will eventually break
+          },
         },
         {
           name: "Studded Leather Armor",
@@ -115,7 +122,6 @@ export const HomeMap = {
         },
       ],
       wielded: "Club",
-      dialogue: ["Hhrnnnnggggghhhhhh!", "Ruggghh!", "Rrrrrrrrggghh!"],
     },
   ],
 };
