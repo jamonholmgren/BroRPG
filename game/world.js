@@ -2,7 +2,6 @@ import { splitChars } from "./utilities.js";
 
 export const World = {
   map: [],
-  mapText: "",
   async load() {
     const map = await this.loadMap("home");
     this.map = map;
@@ -13,22 +12,12 @@ export const World = {
     const response = await fetch(`./game/maps/${mapName}.map`);
     const homeMapText = await response.text();
 
-    // temporary, just for debugging
-    this.mapText = homeMapText;
-
     // this splits the map into an array of arrays of chars, which represent the particular tile
     return homeMapText.split("\n").map((line) => splitChars(line));
   },
   buildTiles() {
     const tiles = document.createElement("div");
     tiles.id = "tiles";
-    tiles.style.position = "absolute";
-    tiles.style.width = "100%";
-    tiles.style.height = "100%";
-    tiles.style.zIndex = "0";
-    tiles.style.padding = "400px";
-    // translate to center on tile 5, 5
-    tiles.style.transform = "translate(560, 560)";
 
     // build the tiles
     this.map.forEach((row, rowIndex) => {
