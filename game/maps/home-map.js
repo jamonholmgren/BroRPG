@@ -55,7 +55,7 @@ export const HomeMap = {
       x: 10,
       y: 10,
       type: "goblin",
-      sentiment: "hostile",
+      disposition: "hostile",
     },
   ],
 };
