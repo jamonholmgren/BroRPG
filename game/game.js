@@ -62,6 +62,7 @@ export const Game = {
     // build tiles
     this.tiles = World.buildTiles();
     this.tiles.style.position = "absolute";
+    this.tiles.style.transition = "transform 0.5s";
     this.gameView.appendChild(this.tiles);
 
     this.centerGameView();
@@ -74,6 +75,7 @@ export const Game = {
     this.character.element.style.height = "32px";
     this.character.element.style.zIndex = "1";
     this.character.element.style.backgroundColor = "red";
+    this.character.element.style.transition = "top 0.5s, left 0.5s";
     this.tiles.appendChild(this.character.element);
 
     // update all movables' positions
@@ -81,26 +83,30 @@ export const Game = {
 
     // listen for key presses
     Controls.init();
-    Controls.on("w", () => {
-      this.character.y -= 1;
+    Controls.on("w", () => this.moveCharacter(0, -1));
+    Controls.on("a", () => this.moveCharacter(-1, 0));
+    Controls.on("s", () => this.moveCharacter(0, 1));
+    Controls.on("d", () => this.moveCharacter(1, 0));
+
+    Controls.on("q", () => this.moveCharacter(-1, -1));
+    Controls.on("e", () => this.moveCharacter(1, -1));
+    Controls.on("z", () => this.moveCharacter(-1, 1));
+    Controls.on("c", () => this.moveCharacter(1, 1));
+  },
+  moveCharacter(x, y) {
+    const newX = this.character.x + x;
+    const newY = this.character.y + y;
+
+    // check for collisions
+    if (World.isPassable(newX, newY)) {
+      this.character.x = newX;
+      this.character.y = newY;
       this.updateMovables();
       this.centerGameView();
-    });
-    Controls.on("s", () => {
-      this.character.y += 1;
-      this.updateMovables();
-      this.centerGameView();
-    });
-    Controls.on("a", () => {
-      this.character.x -= 1;
-      this.updateMovables();
-      this.centerGameView();
-    });
-    Controls.on("d", () => {
-      this.character.x += 1;
-      this.updateMovables();
-      this.centerGameView();
-    });
+    } else {
+      // play some sound, like "oof"
+      console.log("oof");
+    }
   },
   updateMovables() {
     // update the character's element to match its position on the tile map

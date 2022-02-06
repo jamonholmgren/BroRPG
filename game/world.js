@@ -1,11 +1,13 @@
 import { HomeMap } from "./maps/home-map.js";
 
 export const World = {
+  passableTiles: [" ", ";", "-"],
   map: [],
   load() {
-    const map = HomeMap.tiles();
-    this.map = map;
-    console.log(map);
+    this.map = HomeMap.tiles();
+  },
+  isPassable(x, y) {
+    return this.passableTiles.includes(this.map[y][x]);
   },
   buildTiles() {
     const tiles = document.createElement("div");
