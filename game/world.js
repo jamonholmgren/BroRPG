@@ -36,7 +36,7 @@ export const World = {
             tileElement.style.backgroundImage = "url(./game/tiles/tree1.png)";
             break;
           case "*": //Wall
-            tileElement.style.backgroundColor = "gray";
+            tileElement.style.backgroundImage = "url(./game/tiles/water.png)";
             break;
           case "~": // Water
             tileElement.style.backgroundColor = "blue";
