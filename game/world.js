@@ -1,19 +1,11 @@
-import { splitChars } from "./utilities.js";
+import { HomeMap } from "./maps/home-map.js";
 
 export const World = {
   map: [],
-  async load() {
-    const map = await this.loadMap("home");
+  load() {
+    const map = HomeMap.tiles();
     this.map = map;
     console.log(map);
-  },
-  async loadMap(mapName) {
-    // load the text file asynchronously
-    const response = await fetch(`./game/maps/${mapName}.map`);
-    const homeMapText = await response.text();
-
-    // this splits the map into an array of arrays of chars, which represent the particular tile
-    return homeMapText.split("\n").map((line) => splitChars(line));
   },
   buildTiles() {
     const tiles = document.createElement("div");

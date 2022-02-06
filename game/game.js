@@ -49,11 +49,11 @@ export const Game = {
 
     this.body.appendChild(startButton);
   },
-  async onStartGame() {
+  onStartGame() {
     Menu.hideMenu();
 
     // load the world
-    await World.load();
+    World.load();
 
     // set up the game canvas and show it
     this.styleGameCanvas();
