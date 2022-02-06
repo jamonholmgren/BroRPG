@@ -38,6 +38,22 @@ export const World = {
           case "#":
             tileElement.style.backgroundColor = "gray";
             break;
+          
+          case "T":
+            tileElement.style.backgroundColor = "green";
+            break;
+          case "*":
+            tileElement.style.backgroundColor = "gray";
+            break;
+          case "~":
+            tileElement.style.backgroundColor = "blue";
+            break;
+          case ";":
+            tileElement.style.backgroundColor = "red";
+            break;
+          case ",":
+            tileElement.style.backgroundColor = "black";
+            break;
           default:
             tileElement.style.backgroundColor = "transparent";
         }
