@@ -1,5 +1,6 @@
 export const Controls = {
   cooldown: 0,
+  cooldownTime: 0.2,
   cooldownTimer: undefined,
   keyListeners: {},
   onKeyPress(event) {
@@ -11,7 +12,10 @@ export const Controls = {
       clearInterval(this.cooldownTimer);
       this.cooldown = 1;
       const t = this;
-      this.cooldownTimer = setTimeout(() => (t.cooldown = 0), 400);
+      this.cooldownTimer = setTimeout(
+        () => (t.cooldown = 0),
+        this.cooldownTime * 1000
+      );
     }
   },
   init() {

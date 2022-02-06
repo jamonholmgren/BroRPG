@@ -1,20 +1,21 @@
 import { HomeMap } from "./maps/home-map.js";
 
 export const World = {
-  passableTiles: [" ", ";", "-","="],
+  passableTiles: [" ", ";", "-", "="],
   map: [],
   load() {
-    this.map = HomeMap.tiles();
+    this.map = HomeMap;
+    this.tiles = HomeMap.tiles();
   },
   isPassable(x, y) {
-    return this.passableTiles.includes(this.map[y][x]);
+    return this.passableTiles.includes(this.tiles[y][x]);
   },
   buildTiles() {
     const tiles = document.createElement("div");
     tiles.id = "tiles";
 
     // build the tiles
-    this.map.forEach((row, rowIndex) => {
+    this.tiles.forEach((row, rowIndex) => {
       row.forEach((tile, colIndex) => {
         const tileElement = document.createElement("div");
         tileElement.className = tile;
@@ -24,6 +25,7 @@ export const World = {
         tileElement.style.width = "32px";
         tileElement.style.height = "32px";
         tileElement.style.zIndex = "0";
+
         // change the background color of the tile based on the tile type
         switch (tile) {
           case " ": // Grass

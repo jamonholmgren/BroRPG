@@ -9,9 +9,10 @@ export const Game = {
   // character state
   character: {
     element: undefined,
-    x: 3,
-    y: 3,
+    x: 0,
+    y: 0,
   },
+  npcs: [],
 
   // references to DOM elements
   body: document.body,
@@ -37,18 +38,11 @@ export const Game = {
     this.addStartButton(() => {
       find("start-button").remove();
       // create the menu
-      Menu.createMenu({
-        onStart: () => this.onStartGame(),
-      });
-
-      Menu.showMenu();
-
+      this.addMenu();
       this.addPlayPauseButton();
     });
   },
   onStartGame() {
-    Menu.hideMenu();
-
     // load the world
     World.load();
 
@@ -56,40 +50,27 @@ export const Game = {
     this.styleGameCanvas();
     show(this.gameView);
 
-    // build tiles
+    // build tiles and add them to the gameView
     this.tiles = World.buildTiles();
     this.tiles.style.position = "absolute";
     this.tiles.style.transition = "transform 0.5s";
     this.gameView.appendChild(this.tiles);
 
-    this.centerGameView();
+    // add character
+    Object.assign(this.character, World.map.character);
+    Object.assign(this.npcs, World.map.npcs);
 
-    // add the character
-    this.character.element = document.createElement("div");
-    this.character.element.id = "character";
-    this.character.element.style.position = "absolute";
-    this.character.element.style.width = "32px";
-    this.character.element.style.height = "32px";
-    this.character.element.style.zIndex = "1";
-    this.character.element.style.backgroundColor = "red";
-    this.character.element.style.transition = "top 0.5s, left 0.5s";
-    this.tiles.appendChild(this.character.element);
+    this.addCharacter();
+    this.addNpcs();
 
     // update all movables' positions
     this.updateMovables();
 
-    // listen for key presses
-    Controls.init();
-    Controls.on("w", () => this.moveCharacter(0, -1));
-    Controls.on("a", () => this.moveCharacter(-1, 0));
-    Controls.on("s", () => this.moveCharacter(0, 1));
-    Controls.on("x", () => this.moveCharacter(0, 1));
-    Controls.on("d", () => this.moveCharacter(1, 0));
+    // now center the game view on the character
+    this.centerGameView();
 
-    Controls.on("q", () => this.moveCharacter(-1, -1));
-    Controls.on("e", () => this.moveCharacter(1, -1));
-    Controls.on("z", () => this.moveCharacter(-1, 1));
-    Controls.on("c", () => this.moveCharacter(1, 1));
+    // listen for key presses
+    this.setupKeys();
   },
   moveCharacter(x, y) {
     const newX = this.character.x + x;
@@ -110,6 +91,12 @@ export const Game = {
     // update the character's element to match its position on the tile map
     this.character.element.style.top = `${this.character.y * 32}px`;
     this.character.element.style.left = `${this.character.x * 32}px`;
+
+    // update the npcs' elements to match their positions on the tile map
+    this.npcs.forEach((npc) => {
+      npc.element.style.top = `${npc.y * 32}px`;
+      npc.element.style.left = `${npc.x * 32}px`;
+    });
   },
   centerGameView() {
     // center the game view on the character
@@ -133,6 +120,15 @@ export const Game = {
     this.gameView.style.transform = "translate(-50%, -50%)";
     this.gameView.style.borderRadius = "50px";
     this.gameView.style.overflow = "hidden";
+  },
+  addMenu() {
+    Menu.createMenu({
+      onStart: () => {
+        Menu.hideMenu();
+        this.onStartGame();
+      },
+    });
+    Menu.showMenu();
   },
   addStartButton(onClick) {
     const startButton = document.createElement("button");
@@ -170,6 +166,35 @@ export const Game = {
     });
     this.body.appendChild(playPauseButton);
   },
+  addCharacter() {
+    // add the character to the gameView
+    this.character.element = document.createElement("div");
+    this.character.element.id = "character";
+    this.character.element.style.position = "absolute";
+    this.character.element.style.width = "32px";
+    this.character.element.style.height = "32px";
+    this.character.element.style.zIndex = 100;
+    this.character.element.style.backgroundColor = "dodgerblue";
+    // the character's type will be used to set the sprite
+    // this.character.element.style.backgroundImage = `url(./game/characters/${this.character.type}.png)`;
+    this.character.element.style.transition = "top 0.5s, left 0.5s";
+    this.tiles.appendChild(this.character.element);
+  },
+  addNpcs() {
+    this.npcs.forEach((npc) => {
+      npc.element = document.createElement("div");
+      npc.element.id = "npc";
+      npc.element.style.position = "absolute";
+      npc.element.style.width = "32px";
+      npc.element.style.height = "32px";
+      npc.element.style.zIndex = 4;
+      // npc.element.style.backgroundColor = "red";
+      // the npc's type will be used to set the sprite
+      npc.element.style.backgroundImage = `url(./game/characters/${npc.type}.png)`;
+      npc.element.style.transition = "top 0.5s, left 0.5s";
+      this.tiles.appendChild(npc.element);
+    });
+  },
   playPauseMusic() {
     if (Settings.settings.music) {
       this.playPauseButton.innerText = "Pause Music";
@@ -178,5 +203,18 @@ export const Game = {
       this.playPauseButton.innerText = "Play Music";
       Audio.pauseMusic();
     }
+  },
+  setupKeys() {
+    Controls.init();
+    Controls.on("w", () => this.moveCharacter(0, -1));
+    Controls.on("a", () => this.moveCharacter(-1, 0));
+    Controls.on("s", () => this.moveCharacter(0, 1));
+    Controls.on("x", () => this.moveCharacter(0, 1));
+    Controls.on("d", () => this.moveCharacter(1, 0));
+
+    Controls.on("q", () => this.moveCharacter(-1, -1));
+    Controls.on("e", () => this.moveCharacter(1, -1));
+    Controls.on("z", () => this.moveCharacter(-1, 1));
+    Controls.on("c", () => this.moveCharacter(1, 1));
   },
 };
