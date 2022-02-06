@@ -95,6 +95,11 @@ export const Game = {
     // listen for key presses
     this.setupKeys();
   },
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
   movePlayer(x, y) {
     const newX = this.player.x + x;
     const newY = this.player.y + y;
@@ -180,12 +185,14 @@ export const Game = {
 
     this.playPauseMusic();
 
+    // when clicked, toggle the music (and save the setting)
     this.playPauseButton.addEventListener("click", () => {
       Settings.settings.music = !Settings.settings.music;
       Settings.saveSettings();
 
       this.playPauseMusic();
     });
+
     this.dom.body.appendChild(this.playPauseButton);
   },
   addPlayer() {
@@ -196,8 +203,7 @@ export const Game = {
     this.player.element.style.width = "32px";
     this.player.element.style.height = "32px";
     this.player.element.style.zIndex = "100";
-    // this.player.element.style.backgroundColor = "dodgerblue";
-    // the player's type will be used to set the sprite
+    // the player's race will be used to set the sprite
     this.player.element.style.backgroundImage = `url(./game/characters/${this.player.race}.png)`;
     this.player.element.style.transition = "top 0.5s, left 0.5s";
     this.dom.tileWrapper.appendChild(this.player.element);
@@ -210,8 +216,7 @@ export const Game = {
       npc.element.style.width = "32px";
       npc.element.style.height = "32px";
       npc.element.style.zIndex = "4";
-      // npc.element.style.backgroundColor = "red";
-      // the npc's type will be used to set the sprite
+      // the npc's race will be used to set the sprite
       npc.element.style.backgroundImage = `url(./game/characters/${npc.race}.png)`;
       npc.element.style.transition = "top 0.5s, left 0.5s";
       this.dom.tileWrapper.appendChild(npc.element);
