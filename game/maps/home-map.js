@@ -54,17 +54,41 @@ export const HomeMap = {
       hp: 40,
       maxHP: 50,
       disposition: "friendly",
-      dialogue: [
-        "Hello there, I'm Tanford.",
-        "Yeah, there's a town down the road to the southeast.",
-        "Some weather we've been having lately, eh?",
-        "I've been hearing a lot of wolves howling lately.",
-        "You sure like talking to people, don't you?",
+      inventory: [
+        {
+          name: "Healing Potion",
+          type: "potion",
+          hp: 20,
+        },
       ],
-      behaviors: () => {
-        if (this.hp < 40) {
-          // do some sort of healing behavior
-        }
+      wielded: false,
+      behaviors: {
+        // these are just ideas. don't actually use them
+        step: (response) => {
+          if (this.hp < 40) {
+            // do some sort of healing behavior
+            if (this.inventory.includes("Healing Potion")) {
+              response.heal();
+            }
+          } else {
+            response.doDefaultResponse();
+          }
+        },
+        talk: (response) => {
+          if (this.hp < 30) {
+            response.talk("I'm really hurt. I need to heal up.");
+          } else {
+            response.talk("I'm fine. I'm just a villager.");
+          }
+        },
+        takeDamage: (response) => {
+          if (this.hp < 30) {
+            response.talk("Why are you hitting me?!");
+            response.runAway();
+          } else {
+            response.doDefaultResponse();
+          }
+        },
       },
     },
     {
@@ -75,6 +99,22 @@ export const HomeMap = {
       hp: 50,
       maxHP: 50,
       disposition: "hostile",
+      inventory: [
+        {
+          name: "Club",
+          type: "weapon",
+          damage: 10,
+          speed: 1,
+        },
+        {
+          name: "Studded Leather Armor",
+          type: "armor",
+          armor: 5, // this is the amount of damage the armor reduces (and takes itself)
+          damageTaken: 13, // already damaged somewhat
+          durability: 30, // how much damage can be taken before it breaks
+        },
+      ],
+      wielded: "Club",
       dialogue: ["Hhrnnnnggggghhhhhh!", "Ruggghh!", "Rrrrrrrrggghh!"],
     },
   ],
