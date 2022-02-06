@@ -1,6 +1,5 @@
 import { show, hide, find, noop } from "./utilities.js";
 import { Sound } from "./sound.js";
-// import { Settings } from "./settings.js";
 
 export const Menu = {
   // callback functions
@@ -36,10 +35,10 @@ export const Menu = {
     });
   },
   showMenu() {
-    show(menu, { animate: 5.0 });
+    show(this.menu, { animate: 5.0 });
   },
   hideMenu() {
-    hide(menu, { animate: 0.5 });
+    hide(this.menu, { animate: 0.5 });
   },
   styleMenu() {
     // style the menu

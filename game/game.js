@@ -1,6 +1,6 @@
 import { Menu } from "./menu.js";
 import { Sound } from "./sound.js";
-import { find, show, hide, buildTiles } from "./utilities.js";
+import { find, show, hide, buildTiles, buildTileMap } from "./utilities.js";
 import { Controls } from "./controls.js";
 import { Settings } from "./settings.js";
 
@@ -31,6 +31,7 @@ export const Game = {
   npcs: [],
 
   // references to DOM elements
+  /** @type {import("./types").Dom} */
   dom: {
     body: document.body,
     gameView: find("game"),
@@ -45,8 +46,8 @@ export const Game = {
     Settings.loadSettings();
 
     // hide everything so we can build it
-    hide(this.gameView);
-    hide(this.menu);
+    hide(this.dom.gameView);
+    hide(this.dom.menu);
 
     // make the background dark gray
     this.dom.body.style.backgroundColor = "#333333";
@@ -63,22 +64,23 @@ export const Game = {
   onStartGame() {
     // load the world
     this.currentMap = HomeMap;
+    this.tiles = buildTileMap(this.currentMap.ascii);
 
     // set up the game canvas and show it
     this.styleGameCanvas();
-    show(this.gameView);
+    show(this.dom.gameView);
 
     // build tiles and add them to the gameView
-    this.dom.tileWrapper = buildTiles(this.currentMap.ascii);
+    this.dom.tileWrapper = buildTiles(this.tiles);
     this.dom.tileWrapper.style.position = "absolute";
     this.dom.tileWrapper.style.transition = "transform 0.5s";
     this.dom.gameView.appendChild(this.dom.tileWrapper);
 
     // add player with the map's built-in preset properties
-    Object.assign(this.player, this.map.playerPresets);
+    Object.assign(this.player, this.currentMap.playerPresets);
 
     // add all NPCs (and copy them over so they're a copy with .slice())
-    Object.assign(this.npcs, this.map.npcs.slice());
+    Object.assign(this.npcs, this.currentMap.npcs.slice());
 
     // add the player and NPCs to the gameView
     this.addPlayer();
@@ -126,20 +128,20 @@ export const Game = {
   },
   styleGameCanvas() {
     // clear the contents of game
-    this.gameView.innerHTML = "";
+    this.dom.gameView.innerHTML = "";
 
     // style the game canvas
-    this.gameView.style.width = "600px";
-    this.gameView.style.height = "600px";
-    this.gameView.style.boxShadow = "10px 10px 30px black";
-    this.gameView.style.backgroundColor = "#314432";
-    this.gameView.style.backgroundSize = "cover";
-    this.gameView.style.position = "absolute";
-    this.gameView.style.top = "50%";
-    this.gameView.style.left = "50%";
-    this.gameView.style.transform = "translate(-50%, -50%)";
-    this.gameView.style.borderRadius = "50px";
-    this.gameView.style.overflow = "hidden";
+    this.dom.gameView.style.width = "600px";
+    this.dom.gameView.style.height = "600px";
+    this.dom.gameView.style.boxShadow = "10px 10px 30px black";
+    this.dom.gameView.style.backgroundColor = "#314432";
+    this.dom.gameView.style.backgroundSize = "cover";
+    this.dom.gameView.style.position = "absolute";
+    this.dom.gameView.style.top = "50%";
+    this.dom.gameView.style.left = "50%";
+    this.dom.gameView.style.transform = "translate(-50%, -50%)";
+    this.dom.gameView.style.borderRadius = "50px";
+    this.dom.gameView.style.overflow = "hidden";
   },
   addMenu() {
     Menu.createMenu({

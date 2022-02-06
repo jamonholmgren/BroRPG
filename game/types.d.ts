@@ -49,3 +49,7 @@ export type MapType = {
   playerPresets: Partial<Player>;
   npcs: NPC[];
 };
+
+export type Dom = {
+  [k: string]: HTMLElement;
+};

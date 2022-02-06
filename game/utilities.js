@@ -6,16 +6,22 @@ export function find(id) {
   return document.getElementById(id);
 }
 
+/**
+ * Show an element with an optional fading animation.
+ *
+ * @param {HTMLElement} element
+ * @param {{ animate?: number }} options
+ */
 export function show(element, options = {}) {
   if (options.animate) {
     // if options.animate is true, then animate the element's opacity
-    element.style.opacity = 0;
+    element.style.opacity = "0";
     element.style.display = "block";
 
     // for some reason we need to delay this to make it animate properly?
     setTimeout(() => {
       element.style.transition = `opacity ${options.animate}s`;
-      element.style.opacity = 1;
+      element.style.opacity = "1";
     }, 1);
 
     // when it's done, show the element and remove the transition
@@ -25,21 +31,21 @@ export function show(element, options = {}) {
     }, options.animate * 1000);
   } else {
     element.style.display = "block";
-    element.style.opacity = 1;
+    element.style.opacity = "1";
   }
 }
 
 /**
  * Hide an element with an optional fading animation.
  *
- * @param {DomElement} element
- * @param {{ animate: number }} options
+ * @param {HTMLElement} element
+ * @param {{ animate?: number }} options
  */
 export function hide(element, options = {}) {
   if (options.animate) {
     // if options.animate is true, then animate the element's opacity
     element.style.transition = `opacity ${options.animate}s`;
-    element.style.opacity = 0;
+    element.style.opacity = "0";
 
     // when it's done, hide the element and remove the transition
     setTimeout(() => {
@@ -48,7 +54,7 @@ export function hide(element, options = {}) {
     }, options.animate * 1000);
   } else {
     element.style.display = "none";
-    element.style.opacity = 0;
+    element.style.opacity = "0";
   }
 }
 
