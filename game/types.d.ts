@@ -1,3 +1,23 @@
+/**
+ * This file defines the "types" of data we have in the game.
+ * So, if you want to add, for example, a new item type, you just need to add it below.
+ *
+ * We are using TypeScript here and JSDoc in the code. The reason for this is that
+ * JSDoc is just comments, which means we don't need a build step in order to run
+ * the code, but we also get TypeScript's excellent type checking in VS Code while
+ * we are coding. It's the best of both worlds.
+ *
+ * An example of what JSDoc looks like:
+ *
+ * @type {import("./types").CharacterRace}
+ * This is a type definition. It's a way to tell TypeScript that the next line is
+ * the CharacterRace type.
+ *
+ * TypeScript will then yell at you if you made the race property be, for example, "eagle",
+ * which doesn't exist in the races below.
+ *
+ */
+
 export type Disposition =
   | "friendly"
   | "helpful"
