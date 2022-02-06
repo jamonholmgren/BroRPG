@@ -64,6 +64,9 @@ export const World = {
           case ",":
             tileElement.style.backgroundColor = "black";
             break;
+          case "-":
+            tileElement.style.backgroundColor = "brown";
+            break;
           default:
             tileElement.style.backgroundColor = "transparent";
         }
