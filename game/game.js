@@ -9,14 +9,14 @@ import { HomeMap } from "./maps/home-map.js";
 export const Game = {
   // world state
 
-  /** @type {import("./types").MapType} */
+  /** @type {MapType} */
   map: undefined,
   passableTiles: [" ", ";", "-", "="],
   /** @type {string[][]} */
   tiles: undefined,
 
   // player state
-  /** @type {import("./types").Player} */
+  /** @type {Player} */
   player: {
     name: "Adventurer",
     hp: 100,
@@ -27,11 +27,11 @@ export const Game = {
     inventory: [],
     wielded: false,
   },
-  /** @type {import("./types").NPC[]} */
+  /** @type {NPC[]} */
   npcs: [],
 
   // references to DOM elements
-  /** @type {import("./types").Dom} */
+  /** @type {Dom} */
   dom: {
     body: document.body,
     gameView: find("game"),

@@ -1,4 +1,3 @@
-/** @type {import("../types").MapType} */
 export const HomeMap = {
   ascii: `
 ###############################################################################
@@ -71,8 +70,9 @@ export const HomeMap = {
         step: (self) => {
           if (self.hp < 40) {
             // do some sort of healing behavior
-            if (self.inventory.find((i) => i.name === "Healing Potion")) {
-              self.useInventoryItem(i);
+            const potion = self.inventory.find((i) => i.name === "Healing Potion");
+            if (potion) {
+              self.useInventoryItem(potion);
             }
           } else {
             self.doDefaultResponse();
