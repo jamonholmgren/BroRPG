@@ -27,6 +27,21 @@ declare global {
     | "defensive"
     | "hostile";
 
+  export type Intention =
+    | "idle"
+    | "wandering"
+    | "exploring"
+    | "hunting"
+    | "fleeing"
+    | "escaping"
+    | "returning"
+    | "chasing"
+    | "attacking"
+    | "defending"
+    | "retreating"
+    | "stalking"
+    | "escorting";
+
   export type CharacterRace = "human" | "goblin" | "troll" | "orc";
 
   export type ItemType = "weapon" | "shield" | "potion" | "armor" | "scroll";
@@ -45,6 +60,8 @@ declare global {
   export type Character = {
     name: string;
     race: CharacterRace;
+    currentTime: number; // turn-based timer
+    speed: number; // lower = faster
     x: number;
     y: number;
     hp: number;
@@ -60,9 +77,16 @@ declare global {
 
   export type NPC = Character & {
     disposition: Disposition;
+    intention: Intention;
+    target?: undefined | Character;
     behaviors?: {
-      [k: string]: (self: NPC) => void;
+      [k: string]: (self: NPC, action: NPCAction) => void;
     };
+  };
+
+  export type NPCAction = {
+    defaultBehavior: () => void;
+    useInventoryItem: (item: Item) => void;
   };
 
   export type MapType = {

@@ -45,6 +45,7 @@ export const HomeMap = {
     x: 8,
     y: 4,
   },
+  /** @type {NPC[]} */
   npcs: [
     {
       name: "Tanford",
@@ -53,7 +54,11 @@ export const HomeMap = {
       y: 8,
       hp: 40,
       maxHP: 50,
+      speed: 10, // 10 is normal time
+      currentTime: 0,
       disposition: "friendly",
+      intention: "wandering",
+      target: undefined,
       inventory: [
         {
           name: "Healing Potion",
@@ -67,30 +72,30 @@ export const HomeMap = {
       wielded: false,
       behaviors: {
         // these are just ideas. don't actually use them
-        step: (self) => {
+        step: (self, action) => {
           if (self.hp < 40) {
             // do some sort of healing behavior
             const potion = self.inventory.find((i) => i.name === "Healing Potion");
             if (potion) {
-              self.useInventoryItem(potion);
+              action.useInventoryItem(potion);
             }
           } else {
-            self.doDefaultResponse();
+            action.defaultBehavior();
           }
         },
-        talk: (self) => {
+        talk: (self, action) => {
           if (self.hp < 30) {
-            self.talk("I'm really hurt. I need to heal up.");
+            action.talk("I'm really hurt. I need to heal up.");
           } else {
-            self.talk("I'm fine. I'm just a villager.");
+            action.talk("I'm fine. I'm just a villager.");
           }
         },
-        takeDamage: (self) => {
+        takeDamage: (self, action) => {
           if (self.hp < 30) {
-            self.talk("Why are you hitting me?!");
-            self.runAway();
+            action.talk("Why are you hitting me?!");
+            action.runAway();
           } else {
-            self.doDefaultResponse();
+            action.defaultBehavior();
           }
         },
       },
@@ -102,7 +107,11 @@ export const HomeMap = {
       y: 10,
       hp: 50,
       maxHP: 50,
+      speed: 5, // 10 is normal time
+      currentTime: 0,
       disposition: "hostile",
+      intention: "wandering",
+      target: undefined,
       inventory: [
         {
           name: "Club",

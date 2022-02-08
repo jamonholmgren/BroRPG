@@ -5,6 +5,7 @@ import { Controls } from "./controls.js";
 import { Settings } from "./settings.js";
 
 import { HomeMap } from "./maps/home-map.js";
+import { Behaviors } from "./behaviors.js";
 
 export const Game = {
   // world state
@@ -15,18 +16,20 @@ export const Game = {
   /** @type {string[][]} */
   tiles: undefined,
 
-  // player state
   /** @type {Player} */
   player: {
     name: "Adventurer",
     hp: 100,
     maxHP: 100,
+    speed: 10, // 10 is normal time
+    currentTime: 0,
     race: "human",
     x: 0,
     y: 0,
     inventory: [],
     wielded: false,
   },
+
   /** @type {NPC[]} */
   npcs: [],
 
@@ -110,9 +113,35 @@ export const Game = {
       this.player.y = newY;
       this.updateCharacters();
       this.centerGameView();
+
+      // moves player forward in time
+      this.player.currentTime += this.player.speed;
+
+      // check if any NPCs are ready to move next, and move them
+      this.moveNPCs();
     } else {
       Sound.playSound("oof.m4a");
     }
+  },
+  moveNPCs() {
+    let npcToMove = undefined;
+    this.npcs.forEach((npc) => {
+      if (npc.currentTime < (npcToMove?.currentTime || this.player.currentTime)) {
+        npcToMove = npc;
+      }
+    });
+
+    console.log(npcToMove);
+
+    // player is the next to move
+    if (!npcToMove) return;
+
+    // move the NPC
+    // the passing in of isPassible is a bit of a hack, but it works
+    Behaviors.moveNPC(npcToMove, { isPassable: this.isPassable.bind(this) });
+
+    // run it again (tail call recursion, anyone?)
+    this.moveNPCs();
   },
   updateCharacters() {
     // update the player's element to match its position on the tile map
@@ -245,11 +274,7 @@ export const Game = {
     Controls.on("c", () => this.movePlayer(1, 1));
   },
 
-  /**
-   * @param {number} x
-   * @param {number} y
-   * @returns {boolean}
-   */
+  /** @type {(x: number, y: number) => boolean} */
   isPassable(x, y) {
     return this.passableTiles.includes(this.tiles[y][x]);
   },
