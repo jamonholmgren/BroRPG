@@ -1,5 +1,14 @@
+// create the background music element and add it to the dom
+function addBackgroundMusicElement() {
+  const element = document.createElement("audio");
+  element.id = "background-music";
+  document.body.appendChild(element);
+  return element;
+}
+
 export const Sound = {
-  musicElement: document.getElementById("background-music"),
+  /** @type {HTMLAudioElement} */
+  musicElement: addBackgroundMusicElement(),
   playPromise: undefined,
   playMusic(musicPath, options = {}) {
     // if the musicElement is already playing music, stop it
@@ -17,8 +26,7 @@ export const Sound = {
     this.musicElement.loop = options.loop !== undefined ? options.loop : true;
 
     // set the audio's autoplay
-    this.musicElement.autoplay =
-      options.autoplay !== undefined ? options.autoplay : true;
+    this.musicElement.autoplay = options.autoplay !== undefined ? options.autoplay : true;
 
     // play the audio
     this.playPromise = this.musicElement.play();

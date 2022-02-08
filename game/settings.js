@@ -9,12 +9,13 @@ export const Settings = {
   },
   loadSettings() {
     // load the settings
-    let loadedSettings = this.settings;
+    let loadedSettings;
     try {
       loadedSettings = localStorage.getItem("BroRPGSettings");
     } catch (e) {
       console.log(e);
     }
+
     if (loadedSettings) {
       console.log(loadedSettings);
       this.settings = JSON.parse(loadedSettings);
